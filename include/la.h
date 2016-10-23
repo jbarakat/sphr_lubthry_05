@@ -216,37 +216,36 @@ void labipent(int J, double *A, double *B, double *C, double *D,
               double *fu, double *fv, double *u, double *v){
 	int i, j, m, n;
 	double a[J][4], b[J][4], c[J][4], d[J][4], e[J][4], f[J][2];
-	double beta[J][4], tau [J][4], zeta[J][2];
-	double sig [J][4], delt[J][4], eta [J][2];
+	double beta   [4], tau    [4], zeta   [2];
+	double sig    [4], delt   [4], eta    [2];
+	double mu;
 	double lam [J][4], kapp[J][4], gamm[J][2];
-	double mu  [J];
 
 	// initialize
-	for (i = 0; i < J; i++){
-		for (m = 0; m < 4; m++){
-			a[i][m] = 0.0;
-			b[i][m] = 0.0;
-			c[i][m] = 0.0;
-			d[i][m] = 0.0;
-			e[i][m] = 0.0;
-
-			beta[i][m] = 0.0;
-			tau [i][m] = 0.0;
-			sig [i][m] = 0.0;
-			delt[i][m] = 0.0;
+	for (m = 0; m < 4; m++){
+		beta   [m] = 0.0;
+		tau    [m] = 0.0;
+		sig    [m] = 0.0;
+		delt   [m] = 0.0;
+		for (i = 0; i < J; i++){
+			a   [i][m] = 0.0;
+			b   [i][m] = 0.0;
+			c   [i][m] = 0.0;
+			d   [i][m] = 0.0;
+			e   [i][m] = 0.0;
 			lam [i][m] = 0.0;
 			kapp[i][m] = 0.0;
 		}
-		for (n = 0; n < 2; n++){
-			f[i][n] = 0.0;
-			
-			zeta[i][n] = 0.0;
-			eta [i][n] = 0.0;
+	}
+	for (n = 0; n < 2; n++){
+		zeta   [n] = 0.0;
+		eta    [n] = 0.0;
+		for (i = 0; i < J; i++){
+			f   [i][n] = 0.0;
 			gamm[i][n] = 0.0;
 		}
-
-		mu[i] = 0.0;
 	}
+	mu = 0.0;
 
 	// store matrix coefficients
 	for (i = 0; i < J; i++){
@@ -291,62 +290,61 @@ void labipent(int J, double *A, double *B, double *C, double *D,
 
 	// initialize
 	for (m = 0; m < 4; m++){
-		sig [0][m] = c[0][m];
-		delt[0][m] = d[0][m];
-		beta[1][m] = b[1][m];
-		tau [1][m] = c[1][m];
+		sig    [m] = c[0][m];
+		delt   [m] = d[0][m];
+		beta   [m] = b[1][m];
+		tau    [m] = c[1][m];
 	}
 	for (n = 0; n < 2; n++){
-		eta [0][n] = f[0][n];
-		zeta[1][n] = f[1][n];
+		eta    [n] = f[0][n];
+		zeta   [n] = f[1][n];
 	}
 
 	// forward-compute coefficients (only need to store lam, kapp, gamm)
-	// (CURRENT IMPLEMENTATION ALSO STORES BETA, TAU, ZETA, SIG, DELT, ETA, MU - UNNECESSARY)
 	for (i = 0; i < J; i++){
 		if (i > 1){
-			beta[i][0] = b   [i][0] - a   [i][0]*lam [i-2][0] - a   [i][1]*lam [i-2][2]; 
-			beta[i][1] = b   [i][1] - a   [i][0]*lam [i-2][1] - a   [i][1]*lam [i-2][3]; 
-			beta[i][2] = b   [i][2] - a   [i][2]*lam [i-2][0] - a   [i][3]*lam [i-2][2]; 
-			beta[i][3] = b   [i][3] - a   [i][2]*lam [i-2][1] - a   [i][3]*lam [i-2][3]; 
+			beta   [0] = b   [i][0] - a   [i][0]*lam [i-2][0] - a   [i][1]*lam [i-2][2]; 
+			beta   [1] = b   [i][1] - a   [i][0]*lam [i-2][1] - a   [i][1]*lam [i-2][3]; 
+			beta   [2] = b   [i][2] - a   [i][2]*lam [i-2][0] - a   [i][3]*lam [i-2][2]; 
+			beta   [3] = b   [i][3] - a   [i][2]*lam [i-2][1] - a   [i][3]*lam [i-2][3]; 
 
-			tau [i][0] = c   [i][0] - a   [i][0]*kapp[i-2][0] - a   [i][1]*kapp[i-2][2]; 
-			tau [i][1] = c   [i][1] - a   [i][0]*kapp[i-2][1] - a   [i][1]*kapp[i-2][3]; 
-			tau [i][2] = c   [i][2] - a   [i][2]*kapp[i-2][0] - a   [i][3]*kapp[i-2][2]; 
-			tau [i][3] = c   [i][3] - a   [i][2]*kapp[i-2][1] - a   [i][3]*kapp[i-2][3]; 
+			tau    [0] = c   [i][0] - a   [i][0]*kapp[i-2][0] - a   [i][1]*kapp[i-2][2]; 
+			tau    [1] = c   [i][1] - a   [i][0]*kapp[i-2][1] - a   [i][1]*kapp[i-2][3]; 
+			tau    [2] = c   [i][2] - a   [i][2]*kapp[i-2][0] - a   [i][3]*kapp[i-2][2]; 
+			tau    [3] = c   [i][3] - a   [i][2]*kapp[i-2][1] - a   [i][3]*kapp[i-2][3]; 
 
-			zeta[i][0] = f   [i][0] - a   [i][0]*gamm[i-2][0] - a   [i][1]*gamm[i-2][1]; 
-			zeta[i][1] = f   [i][1] - a   [i][2]*gamm[i-2][0] - a   [i][3]*gamm[i-2][1]; 
+			zeta   [0] = f   [i][0] - a   [i][0]*gamm[i-2][0] - a   [i][1]*gamm[i-2][1]; 
+			zeta   [1] = f   [i][1] - a   [i][2]*gamm[i-2][0] - a   [i][3]*gamm[i-2][1]; 
 		}
 		if (i > 0){
-			sig [i][0] = tau [i][0] - beta[i][0]*lam [i-1][0] - beta[i][1]*lam [i-1][2]; 
-			sig [i][1] = tau [i][1] - beta[i][0]*lam [i-1][1] - beta[i][1]*lam [i-1][3]; 
-			sig [i][2] = tau [i][2] - beta[i][2]*lam [i-1][0] - beta[i][3]*lam [i-1][2]; 
-			sig [i][3] = tau [i][3] - beta[i][2]*lam [i-1][1] - beta[i][3]*lam [i-1][3]; 
+			sig    [0] = tau    [0] - beta   [0]*lam [i-1][0] - beta   [1]*lam [i-1][2]; 
+			sig    [1] = tau    [1] - beta   [0]*lam [i-1][1] - beta   [1]*lam [i-1][3]; 
+			sig    [2] = tau    [2] - beta   [2]*lam [i-1][0] - beta   [3]*lam [i-1][2]; 
+			sig    [3] = tau    [3] - beta   [2]*lam [i-1][1] - beta   [3]*lam [i-1][3]; 
 
-			delt[i][0] = d   [i][0] - beta[i][0]*kapp[i-1][0] - beta[i][1]*kapp[i-1][2]; 
-			delt[i][1] = d   [i][1] - beta[i][0]*kapp[i-1][1] - beta[i][1]*kapp[i-1][3]; 
-			delt[i][2] = d   [i][2] - beta[i][2]*kapp[i-1][0] - beta[i][3]*kapp[i-1][2]; 
-			delt[i][3] = d   [i][3] - beta[i][2]*kapp[i-1][1] - beta[i][3]*kapp[i-1][3]; 
+			delt   [0] = d   [i][0] - beta   [0]*kapp[i-1][0] - beta   [1]*kapp[i-1][2]; 
+			delt   [1] = d   [i][1] - beta   [0]*kapp[i-1][1] - beta   [1]*kapp[i-1][3]; 
+			delt   [2] = d   [i][2] - beta   [2]*kapp[i-1][0] - beta   [3]*kapp[i-1][2]; 
+			delt   [3] = d   [i][3] - beta   [2]*kapp[i-1][1] - beta   [3]*kapp[i-1][3]; 
 
-			eta [i][0] = zeta[i][0] - beta[i][0]*gamm[i-1][0] - beta[i][1]*gamm[i-1][1]; 
-			eta [i][1] = zeta[i][1] - beta[i][2]*gamm[i-1][0] - beta[i][3]*gamm[i-1][1]; 
+			eta    [0] = zeta   [0] - beta   [0]*gamm[i-1][0] - beta   [1]*gamm[i-1][1]; 
+			eta    [1] = zeta   [1] - beta   [2]*gamm[i-1][0] - beta   [3]*gamm[i-1][1]; 
 		}
 	
-		mu  [i]    =  sig [i][0]*sig [i][3] - sig [i][2]*sig [i][1]       ;
+		mu         =  sig    [0]*sig    [3] - sig    [2]*sig    [1]    ;
 		
-		lam [i][0] = (sig [i][3]*delt[i][0] - sig [i][1]*delt[i][2])/mu[i];
-		lam [i][1] = (sig [i][3]*delt[i][1] - sig [i][1]*delt[i][3])/mu[i];
-		lam [i][2] = (sig [i][0]*delt[i][2] - sig [i][2]*delt[i][0])/mu[i];
-		lam [i][3] = (sig [i][0]*delt[i][3] - sig [i][2]*delt[i][1])/mu[i];
+		lam [i][0] = (sig    [3]*delt   [0] - sig    [1]*delt   [2])/mu;
+		lam [i][1] = (sig    [3]*delt   [1] - sig    [1]*delt   [3])/mu;
+		lam [i][2] = (sig    [0]*delt   [2] - sig    [2]*delt   [0])/mu;
+		lam [i][3] = (sig    [0]*delt   [3] - sig    [2]*delt   [1])/mu;
 		
-		kapp[i][0] = (sig [i][3]*e   [i][0] - sig [i][1]*e   [i][2])/mu[i];
-		kapp[i][1] = (sig [i][3]*e   [i][1] - sig [i][1]*e   [i][3])/mu[i];
-		kapp[i][2] = (sig [i][0]*e   [i][2] - sig [i][2]*e   [i][0])/mu[i];
-		kapp[i][3] = (sig [i][0]*e   [i][3] - sig [i][2]*e   [i][1])/mu[i];
+		kapp[i][0] = (sig    [3]*e   [i][0] - sig    [1]*e   [i][2])/mu;
+		kapp[i][1] = (sig    [3]*e   [i][1] - sig    [1]*e   [i][3])/mu;
+		kapp[i][2] = (sig    [0]*e   [i][2] - sig    [2]*e   [i][0])/mu;
+		kapp[i][3] = (sig    [0]*e   [i][3] - sig    [2]*e   [i][1])/mu;
 		
-		gamm[i][0] = (sig [i][3]*eta [i][0] - sig [i][1]*eta [i][1])/mu[i];
-		gamm[i][1] = (sig [i][0]*eta [i][1] - sig [i][2]*eta [i][0])/mu[i];
+		gamm[i][0] = (sig    [3]*eta    [0] - sig    [1]*eta    [1])/mu;
+		gamm[i][1] = (sig    [0]*eta    [1] - sig    [2]*eta    [0])/mu;
 	}
 
 

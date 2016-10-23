@@ -154,14 +154,37 @@ void fdstep(int n, int J, double dr, double dt, double *params,
 	double dr2 = dr*dr;
 	double dth = 0.5*dt;
 	double t   = n*dt - dth;
-	double hm[J], gm[J], fm[J];
-	double h [J], g [J];
-	double sh[J], sg[J];
-	double U[JJ], DF[JJ], DB[JJ], DC[JJ], DA[JJ], DD[JJ];
-	double P[JJ], DP[JJ];
-	double kh[J], kg[J], mh[J], mg[J];
-	double Kh[JJ], Kg[JJ], Mh[JJ], Mg[JJ];
-	double A[JJ], B[JJ], C[JJ], D[JJ];
+
+	// allocate memory
+	double *hm = (double*) malloc(J  * sizeof(double));
+	double *gm = (double*) malloc(J  * sizeof(double));
+	double *fm = (double*) malloc(J  * sizeof(double));
+	double *h  = (double*) malloc(J  * sizeof(double));
+	double *g  = (double*) malloc(J  * sizeof(double));
+	double *sh = (double*) malloc(J  * sizeof(double));
+	double *sg = (double*) malloc(J  * sizeof(double));
+	double *s1 = (double*) malloc(J  * sizeof(double));
+	double *s2 = (double*) malloc(J  * sizeof(double));
+	double *kh = (double*) malloc(J  * sizeof(double));
+	double *mh = (double*) malloc(J  * sizeof(double));
+	double *kg = (double*) malloc(J  * sizeof(double));
+	double *mg = (double*) malloc(J  * sizeof(double));
+	double *Kh = (double*) malloc(JJ * sizeof(double));
+	double *Mh = (double*) malloc(JJ * sizeof(double));
+	double *Kg = (double*) malloc(JJ * sizeof(double));
+	double *Mg = (double*) malloc(JJ * sizeof(double));
+	double *U  = (double*) malloc(JJ * sizeof(double));
+	double *DF = (double*) malloc(JJ * sizeof(double));
+	double *DB = (double*) malloc(JJ * sizeof(double));
+	double *DC = (double*) malloc(JJ * sizeof(double));
+	double *DA = (double*) malloc(JJ * sizeof(double));
+	double *DD = (double*) malloc(JJ * sizeof(double));
+	double *P  = (double*) malloc(JJ * sizeof(double));
+	double *DP = (double*) malloc(JJ * sizeof(double));
+	double *A  = (double*) malloc(JJ * sizeof(double));
+	double *B  = (double*) malloc(JJ * sizeof(double));
+	double *C  = (double*) malloc(JJ * sizeof(double));
+	double *D  = (double*) malloc(JJ * sizeof(double));
 
 	// physical parameters
 	double Ca    = params[0]; double k0 = 1.0/Ca;
@@ -235,8 +258,6 @@ void fdstep(int n, int J, double dr, double dt, double *params,
 	laband(J, DA, 0, 1, Mg, 0, 0, D); laband(J, D , 0, 1, DF, 1, 0, D);
 
 	// update source functions at (j,n)
-	double s1[J], s2[J];
-
 	for (i = 0; i < J; i++) { s1[i] = 0.0; s2[i] = 0.0; }
 	laband(J, A, 2, 2, h0, s1);
 	laband(J, B, 2, 2, g0, s2);
@@ -290,6 +311,37 @@ void fdstep(int n, int J, double dr, double dt, double *params,
 		if (t > tstop) f1[i] = f0[i]     ;
 		else           f1[i] = f0[i] - dt;
 	}
+
+	// free memory
+	free(hm);
+	free(gm);
+	free(fm);
+	free(h );
+	free(g );
+	free(sh);
+	free(sg);
+	free(s1);
+	free(s2);
+	free(kh);
+	free(mh);
+	free(kg);
+	free(mg);
+	free(Kh);
+	free(Mh);
+	free(Kg);
+	free(Mg);
+	free(U );
+	free(DF);
+	free(DB);
+	free(DC);
+	free(DA);
+	free(DD);
+	free(P );
+	free(DP);
+	free(A );
+	free(B );
+	free(C );
+	free(D );
 }
 
 // time evolution
@@ -372,12 +424,35 @@ void fdaux(int J, int N, int M, double dr, double dt, double *params,
 	int J1J1 = J1*J1;
 	double dr2 = dr*dr;
 	double dth = 0.5*dt;
-	double h[J], g[J], f[J], p[J], q[J], vs[J];
-	double s1[J], s2[J];
-	double U[JJ], DF[JJ], DB[JJ], DC[JJ], DA[JJ], DD[JJ];
-	double kh[J], kg[J], mh[J], mg[J];
-	double Kh[JJ], Kg[JJ], Mh[JJ], Mg[JJ];
-	double A[JJ], B[JJ], C[JJ], D[JJ], E[JJ];
+
+	// allocate memory
+	double *h  = (double*) malloc(J  * sizeof(double));
+	double *g  = (double*) malloc(J  * sizeof(double));
+	double *f  = (double*) malloc(J  * sizeof(double));
+	double *p  = (double*) malloc(J  * sizeof(double));
+	double *q  = (double*) malloc(J  * sizeof(double));
+	double *vs = (double*) malloc(J  * sizeof(double));
+	double *s1 = (double*) malloc(J  * sizeof(double));
+	double *s2 = (double*) malloc(J  * sizeof(double));
+	double *kh = (double*) malloc(J  * sizeof(double));
+	double *mh = (double*) malloc(J  * sizeof(double));
+	double *kg = (double*) malloc(J  * sizeof(double));
+	double *mg = (double*) malloc(J  * sizeof(double));
+	double *Kh = (double*) malloc(JJ * sizeof(double));
+	double *Mh = (double*) malloc(JJ * sizeof(double));
+	double *Kg = (double*) malloc(JJ * sizeof(double));
+	double *Mg = (double*) malloc(JJ * sizeof(double));
+	double *U  = (double*) malloc(JJ * sizeof(double));
+	double *DF = (double*) malloc(JJ * sizeof(double));
+	double *DB = (double*) malloc(JJ * sizeof(double));
+	double *DC = (double*) malloc(JJ * sizeof(double));
+	double *DA = (double*) malloc(JJ * sizeof(double));
+	double *DD = (double*) malloc(JJ * sizeof(double));
+	double *A  = (double*) malloc(JJ * sizeof(double));
+	double *B  = (double*) malloc(JJ * sizeof(double));
+	double *C  = (double*) malloc(JJ * sizeof(double));
+	double *D  = (double*) malloc(JJ * sizeof(double));
+	double *E  = (double*) malloc(JJ * sizeof(double));
 
 	// initialize record counter and wait time
 	m = 0;
@@ -478,6 +553,35 @@ void fdaux(int J, int N, int M, double dr, double dt, double *params,
 			m++;
 		}
 	}
+	
+	// free memory
+	free(h );
+	free(g );
+	free(f );
+	free(p );
+	free(q );
+	free(vs);
+	free(s1);
+	free(s2);
+	free(kh);
+	free(mh);
+	free(kg);
+	free(mg);
+	free(Kh);
+	free(Mh);
+	free(Kg);
+	free(Mg);
+	free(U );
+	free(DF);
+	free(DB);
+	free(DC);
+	free(DA);
+	free(DD);
+	free(A );
+	free(B );
+	free(C );
+	free(D );
+	free(E );
 }
 
 #endif

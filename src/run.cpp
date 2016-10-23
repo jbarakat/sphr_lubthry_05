@@ -16,41 +16,42 @@ using namespace std;
 
 int main(){
 	int i, j, m, n;
+	char fn[1024];
+	double params[50] = {0.0};
 
-	// physical parameters
-	double Ca    = 0.0001;
-	double Bo    = 1.0;
-	double Ma    = 0.0;
+	// read parameters
+	sprintf(fn, "./params.in" );
+	readInput(fn, params);
 
-	// domain parameters
-	double dr    = 0.05;
-	double dt    = 0.00001;
-	double dtrec = 0.01;
-	double r1    = 20.0;
-	double t1    = 0.8;
-	double tstop = 2.2;
+	double Ca    = params[0];
+	double Bo    = params[1];
+	double Ma    = params[2];
+	double tstop = params[3];
+	double r1    = params[4];
+	double t1    = params[5];
+	double dr    = params[6];
+	double dt    = params[7];
+	double dtrec = params[8];
+	
 	int J  = r1/dr;
 	int N  = t1/dt + 1;
 	int M = N*dt/dtrec;
+	N = 1000;
+	M = 100;
 
 	/* NOTE: The CFL number for this problem is given by
 	 *
-	 *           dt           Ma dt
-	 *   CFL = -------   or   -----
-	 *         Ca dr^4         dr^4
+	 *         dt D
+	 *   CFL = ----
+	 *         dr^4
 	 *
-	 * depending on whether Ma or 1/Ca is the larger diffusion coefficient.
+	 * where D is a fourth-order diffusion coefficient. Typically,
+	 *
+	 *   D ~ O(r1^6 / Ca)    or    D ~ O(r1^4 Ma)
 	 *
 	 * Having CFL = O(1) is desirable for numerical accuracy, but is not 
 	 * required for numerical stability.
 	 */
-	
-	// store parameters
-	double params[10];
-	params[0] = Ca   ;
-	params[1] = Bo   ;
-	params[2] = Ma   ;
-	params[3] = tstop;
 	
 	// storage matrices
 	int J1 = J+1;
@@ -92,8 +93,16 @@ int main(){
 	fdgrid(J, N, M, dr, dt, R, T);
 
 	// write to file
-	write (J, M, dr, dt, params, R, T, H, G, F, P, Q, Vs);
-
+	sprintf(fn, "r" ); write(J, M, dr, dt, params, R , fn);
+	sprintf(fn, "t" ); write(J, M, dr, dt, params, T , fn);
+	sprintf(fn, "h" ); write(J, M, dr, dt, params, H , fn);
+	sprintf(fn, "g" ); write(J, M, dr, dt, params, G , fn);
+	sprintf(fn, "f" ); write(J, M, dr, dt, params, F , fn);
+	sprintf(fn, "p" ); write(J, M, dr, dt, params, P , fn);
+	sprintf(fn, "q" ); write(J, M, dr, dt, params, Q , fn);
+	sprintf(fn, "vs"); write(J, M, dr, dt, params, Vs, fn);
+	
+	return(0);
 }
 
 

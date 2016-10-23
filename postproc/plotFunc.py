@@ -8,7 +8,7 @@ import os
 
 # paths
 workdir  = os.getcwd()
-outdir   = workdir + '/../output'
+outdir   = workdir + '/../output/Ca1em04/Bo1ep00/Ma0ep00/dr5em02/dt1em03/'
 tfile    = '/t.txt'
 rfile    = '/r.txt'
 hfile    = '/h.txt'
@@ -35,7 +35,7 @@ J  = J1 - 1
 N  = N1 - 1
 
 pl = 'x'
-ydata = hdata
+ydata = vdata
 
 if pl == 'x' :
 	for i in range(N1) :
