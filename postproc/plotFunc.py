@@ -8,7 +8,7 @@ import os
 
 # paths
 workdir  = os.getcwd()
-outdir   = workdir + '/../output/Ca1em04/Bo1ep00/Ma0ep00/dr5em02/dt1em03/'
+outdir   = workdir + '/../output/Ca1em04/Bo1ep00/Ma0ep00/dr5em02/dt1em06/'
 tfile    = '/t.txt'
 rfile    = '/r.txt'
 hfile    = '/h.txt'
@@ -40,6 +40,7 @@ ydata = qdata
 if pl == 'x' :
 	for i in range(N1) :
 		if i % 1 == 0 :
+		#if i < 100 :
 			x = rdata[:,i]
 			y = ydata[:,i]
 			plot(x,y,'-')
