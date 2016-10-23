@@ -79,7 +79,7 @@ void write(int J, int M, double dr, double dt, double *params,
 		if (n == 7){ sprintf(hdr,"../output/vs"); ptr = &Vs[0]; }
 		
 		//sprintf(fn, "%s%s",hdr,sfx);
-		sprintf(fn, "%s.txt",hdr,sfx);
+		sprintf(fn, "%s.txt",hdr);
 		fp = fopen(fn,"w");
 		for (m = 0; m < M1; m++){
 			for (i = 0; i < J1; i++){

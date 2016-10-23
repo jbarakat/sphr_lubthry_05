@@ -472,8 +472,8 @@ void fdaux(int J, int N, int M, double dr, double dt, double *params,
 				Vs[m*J1 + i] = vs[i];
 			}
 			P [m*J1 + J] = 0.0;
-			Q [m*J1 + J] = NULL;
-			Vs[m*J1 + J] = NULL;
+			Q [m*J1 + J] = 0.0;
+			Vs[m*J1 + J] = 0.0;
 			
 			m++;
 		}
