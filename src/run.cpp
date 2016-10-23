@@ -36,8 +36,8 @@ int main(){
 	int J  = r1/dr;
 	int N  = t1/dt + 1;
 	int M = N*dt/dtrec;
-	N = 1000;
-	M = 100;
+//	N = 1000;
+//	M = 100;
 	
 	int J1 = J+1;
 	int M1 = M+1;
