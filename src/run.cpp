@@ -38,6 +38,11 @@ int main(){
 	int M = N*dt/dtrec;
 	N = 1000;
 	M = 100;
+	
+	int J1 = J+1;
+	int M1 = M+1;
+	int M1J1 = M1*J1;
+	int M1J  = M1*J;
 
 	/* NOTE: The CFL number for this problem is given by
 	 *
@@ -53,35 +58,15 @@ int main(){
 	 * required for numerical stability.
 	 */
 	
-	// storage matrices
-	int J1 = J+1;
-	int M1 = M+1;
-	int M1J1 = M1*J1;
-	int M1J  = M1*J;
-	double R [M1J1];
-	double T [M1J1];
-	double H [M1J1];
-	double G [M1J1];
-	double F [M1J1];
-	double P [M1J1];
-	double Q [M1J1];
-	double Vs[M1J1];
-
-	// initialize
-	for (i = 0; i < M1J1; i++){
-		R [i] = 0.0;
-		T [i] = 0.0;
-		H [i] = 0.0;
-		G [i] = 0.0;
-		F [i] = 0.0;
-		P [i] = 0.0;
-		Q [i] = 0.0;
-		Vs[i] = 0.0;
-	}
-//	for (i = 0; i < M1J; i++){
-//		Q [i] = 0.0;
-//		Vs[i] = 0.0;
-//	}
+	// allocate memory and initialize to zero
+	double *R  = (double*) calloc(M1J1, sizeof(double));
+	double *T  = (double*) calloc(M1J1, sizeof(double));
+	double *H  = (double*) calloc(M1J1, sizeof(double));
+	double *G  = (double*) calloc(M1J1, sizeof(double));
+	double *F  = (double*) calloc(M1J1, sizeof(double));
+	double *P  = (double*) calloc(M1J1, sizeof(double));
+	double *Q  = (double*) calloc(M1J1, sizeof(double));
+	double *Vs = (double*) calloc(M1J1, sizeof(double));
 	
 	// time evolution of h, g, and f
 	fdevol(J, N, M, dr, dt, params, H, G, F);
@@ -101,6 +86,16 @@ int main(){
 	sprintf(fn, "p" ); write(J, M, dr, dt, params, P , fn);
 	sprintf(fn, "q" ); write(J, M, dr, dt, params, Q , fn);
 	sprintf(fn, "vs"); write(J, M, dr, dt, params, Vs, fn);
+
+	// free memory
+	free(R );
+	free(T );
+	free(H );
+	free(G );
+	free(F );
+	free(P );
+	free(Q );
+	free(Vs);
 	
 	return(0);
 }

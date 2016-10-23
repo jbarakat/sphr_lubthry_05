@@ -155,36 +155,36 @@ void fdstep(int n, int J, double dr, double dt, double *params,
 	double dth = 0.5*dt;
 	double t   = n*dt - dth;
 
-	// allocate memory
-	double *hm = (double*) malloc(J  * sizeof(double));
-	double *gm = (double*) malloc(J  * sizeof(double));
-	double *fm = (double*) malloc(J  * sizeof(double));
-	double *h  = (double*) malloc(J  * sizeof(double));
-	double *g  = (double*) malloc(J  * sizeof(double));
-	double *sh = (double*) malloc(J  * sizeof(double));
-	double *sg = (double*) malloc(J  * sizeof(double));
-	double *s1 = (double*) malloc(J  * sizeof(double));
-	double *s2 = (double*) malloc(J  * sizeof(double));
-	double *kh = (double*) malloc(J  * sizeof(double));
-	double *mh = (double*) malloc(J  * sizeof(double));
-	double *kg = (double*) malloc(J  * sizeof(double));
-	double *mg = (double*) malloc(J  * sizeof(double));
-	double *Kh = (double*) malloc(JJ * sizeof(double));
-	double *Mh = (double*) malloc(JJ * sizeof(double));
-	double *Kg = (double*) malloc(JJ * sizeof(double));
-	double *Mg = (double*) malloc(JJ * sizeof(double));
-	double *U  = (double*) malloc(JJ * sizeof(double));
-	double *DF = (double*) malloc(JJ * sizeof(double));
-	double *DB = (double*) malloc(JJ * sizeof(double));
-	double *DC = (double*) malloc(JJ * sizeof(double));
-	double *DA = (double*) malloc(JJ * sizeof(double));
-	double *DD = (double*) malloc(JJ * sizeof(double));
-	double *P  = (double*) malloc(JJ * sizeof(double));
-	double *DP = (double*) malloc(JJ * sizeof(double));
-	double *A  = (double*) malloc(JJ * sizeof(double));
-	double *B  = (double*) malloc(JJ * sizeof(double));
-	double *C  = (double*) malloc(JJ * sizeof(double));
-	double *D  = (double*) malloc(JJ * sizeof(double));
+	// allocate memory and initialize to zero
+	double *hm = (double*) calloc(J , sizeof(double));
+	double *gm = (double*) calloc(J , sizeof(double));
+	double *fm = (double*) calloc(J , sizeof(double));
+	double *h  = (double*) calloc(J , sizeof(double));
+	double *g  = (double*) calloc(J , sizeof(double));
+	double *sh = (double*) calloc(J , sizeof(double));
+	double *sg = (double*) calloc(J , sizeof(double));
+	double *s1 = (double*) calloc(J , sizeof(double));
+	double *s2 = (double*) calloc(J , sizeof(double));
+	double *kh = (double*) calloc(J , sizeof(double));
+	double *mh = (double*) calloc(J , sizeof(double));
+	double *kg = (double*) calloc(J , sizeof(double));
+	double *mg = (double*) calloc(J , sizeof(double));
+	double *Kh = (double*) calloc(JJ, sizeof(double));
+	double *Mh = (double*) calloc(JJ, sizeof(double));
+	double *Kg = (double*) calloc(JJ, sizeof(double));
+	double *Mg = (double*) calloc(JJ, sizeof(double));
+	double *U  = (double*) calloc(JJ, sizeof(double));
+	double *DF = (double*) calloc(JJ, sizeof(double));
+	double *DB = (double*) calloc(JJ, sizeof(double));
+	double *DC = (double*) calloc(JJ, sizeof(double));
+	double *DA = (double*) calloc(JJ, sizeof(double));
+	double *DD = (double*) calloc(JJ, sizeof(double));
+	double *P  = (double*) calloc(JJ, sizeof(double));
+	double *DP = (double*) calloc(JJ, sizeof(double));
+	double *A  = (double*) calloc(JJ, sizeof(double));
+	double *B  = (double*) calloc(JJ, sizeof(double));
+	double *C  = (double*) calloc(JJ, sizeof(double));
+	double *D  = (double*) calloc(JJ, sizeof(double));
 
 	// physical parameters
 	double Ca    = params[0]; double k0 = 1.0/Ca;
@@ -192,16 +192,9 @@ void fdstep(int n, int J, double dr, double dt, double *params,
 	double Ma    = params[2]; double m0 = Ma;
 	double tstop = params[3];
 	
-	// initialize solution and source vectors
-	for (i = 0; i < J; i++){
-		h[i] = 0.0;
-		g[i] = 0.0;
-
-		if (t > tstop){
-			sh[i] = 0.0;
-			sg[i] = 0.0;
-		}
-		else {
+	// initialize source vectors
+	if (t < tstop){
+		for (i = 0; i < J; i++){
 			sh[i] = dt ;
 			sg[i] = 0.0;
 		}
@@ -231,12 +224,6 @@ void fdstep(int n, int J, double dr, double dt, double *params,
 	// diffusion coefficients kh, kg, mh, mg at (j,n)
 	// (NO PROJECTION TO THE 1/2 TIME LEVEL - NOT TECHNICALLY CORRECT...)
 	fddiff(J, k0, m0, hm, gm, fm, kh, kg, mh, mg);
-	for (i = 0; i < JJ; i++){
-		Kh[i] = 0.0;
-		Kg[i] = 0.0;
-		Mh[i] = 0.0;
-		Mg[i] = 0.0;
-	}
 	for (i = 0; i < J; i++){
 		Kh[i*J + i] = -dth*kh[i];
 		Kg[i*J + i] = -dth*kg[i];
@@ -245,13 +232,6 @@ void fdstep(int n, int J, double dr, double dt, double *params,
 	}
 	
 	// operator matrices A, B, C, D
-	for (i = 0; i < JJ; i++){
-		A[i] = 0.0;
-		B[i] = 0.0;
-		C[i] = 0.0;
-		D[i] = 0.0;
-	}
-	
 	laband(J, DA, 0, 1, Kh, 0, 0, A); laband(J, A , 0, 1, DP, 2, 1, A);
 	laband(J, DA, 0, 1, Mh, 0, 0, B); laband(J, B , 0, 1, DF, 1, 0, B);
 	laband(J, DA, 0, 1, Kg, 0, 0, C); laband(J, C , 0, 1, DP, 2, 1, C);
@@ -308,8 +288,8 @@ void fdstep(int n, int J, double dr, double dt, double *params,
 
 	// advance f
 	for (i = 0; i < J+1; i++){
-		if (t > tstop) f1[i] = f0[i]     ;
-		else           f1[i] = f0[i] - dt;
+		if (t < tstop)  f1[i] = f0[i] - dt;
+		else            f1[i] = f0[i]     ;
 	}
 
 	// free memory
@@ -351,29 +331,19 @@ void fdevol(int J, int N, int M, double dr, double dt, double *params,
 	int J1 = J+1;
 	int N1 = N+1;
 	int M1 = M+1;
-	double h0[J1], g0[J1], f0[J1];
-	double h1[J1], g1[J1], f1[J1];
 	double t, r;
+	
+	// allocate memory and initialize to zero
+	double *h0 = (double*) calloc(J1, sizeof(double));
+	double *g0 = (double*) calloc(J1, sizeof(double));
+	double *f0 = (double*) calloc(J1, sizeof(double));
+	double *h1 = (double*) calloc(J1, sizeof(double));
+	double *g1 = (double*) calloc(J1, sizeof(double));
+	double *f1 = (double*) calloc(J1, sizeof(double));
 
 	// initialize record counter and wait time
 	m = 0;
 	nrec = N/M;
-	
-	// initialize vectors and matrices
-	for (i = 0; i < J1; i++){
-		h0[i] = 0.0;
-		g0[i] = 0.0;
-		f0[i] = 0.0;
-		h1[i] = 0.0;
-		g1[i] = 0.0;
-		f1[i] = 0.0;
-
-		for (m = 0; m < M1; m++){
-			H[m*J1 + i] = 0.0;
-			G[m*J1 + i] = 0.0;
-			F[m*J1 + i] = 0.0;
-		}
-	}
 
 	// initial conditions
 	for (i = 0; i < J1; i++){
@@ -410,6 +380,14 @@ void fdevol(int J, int N, int M, double dr, double dt, double *params,
 			}
 		}
 	}
+	
+	// free memory
+	free(h0);
+	free(g0);
+	free(f0);
+	free(h1);
+	free(g1);
+	free(f1);
 }
 
 // back-calculate p, q, and vs
@@ -425,34 +403,34 @@ void fdaux(int J, int N, int M, double dr, double dt, double *params,
 	double dr2 = dr*dr;
 	double dth = 0.5*dt;
 
-	// allocate memory
-	double *h  = (double*) malloc(J  * sizeof(double));
-	double *g  = (double*) malloc(J  * sizeof(double));
-	double *f  = (double*) malloc(J  * sizeof(double));
-	double *p  = (double*) malloc(J  * sizeof(double));
-	double *q  = (double*) malloc(J  * sizeof(double));
-	double *vs = (double*) malloc(J  * sizeof(double));
-	double *s1 = (double*) malloc(J  * sizeof(double));
-	double *s2 = (double*) malloc(J  * sizeof(double));
-	double *kh = (double*) malloc(J  * sizeof(double));
-	double *mh = (double*) malloc(J  * sizeof(double));
-	double *kg = (double*) malloc(J  * sizeof(double));
-	double *mg = (double*) malloc(J  * sizeof(double));
-	double *Kh = (double*) malloc(JJ * sizeof(double));
-	double *Mh = (double*) malloc(JJ * sizeof(double));
-	double *Kg = (double*) malloc(JJ * sizeof(double));
-	double *Mg = (double*) malloc(JJ * sizeof(double));
-	double *U  = (double*) malloc(JJ * sizeof(double));
-	double *DF = (double*) malloc(JJ * sizeof(double));
-	double *DB = (double*) malloc(JJ * sizeof(double));
-	double *DC = (double*) malloc(JJ * sizeof(double));
-	double *DA = (double*) malloc(JJ * sizeof(double));
-	double *DD = (double*) malloc(JJ * sizeof(double));
-	double *A  = (double*) malloc(JJ * sizeof(double));
-	double *B  = (double*) malloc(JJ * sizeof(double));
-	double *C  = (double*) malloc(JJ * sizeof(double));
-	double *D  = (double*) malloc(JJ * sizeof(double));
-	double *E  = (double*) malloc(JJ * sizeof(double));
+	// allocate memory and initialize to zero
+	double *h  = (double*) calloc(J , sizeof(double));
+	double *g  = (double*) calloc(J , sizeof(double));
+	double *f  = (double*) calloc(J , sizeof(double));
+	double *p  = (double*) calloc(J , sizeof(double));
+	double *q  = (double*) calloc(J , sizeof(double));
+	double *vs = (double*) calloc(J , sizeof(double));
+	double *s1 = (double*) calloc(J , sizeof(double));
+	double *s2 = (double*) calloc(J , sizeof(double));
+	double *kh = (double*) calloc(J , sizeof(double));
+	double *mh = (double*) calloc(J , sizeof(double));
+	double *kg = (double*) calloc(J , sizeof(double));
+	double *mg = (double*) calloc(J , sizeof(double));
+	double *Kh = (double*) calloc(JJ, sizeof(double));
+	double *Mh = (double*) calloc(JJ, sizeof(double));
+	double *Kg = (double*) calloc(JJ, sizeof(double));
+	double *Mg = (double*) calloc(JJ, sizeof(double));
+	double *U  = (double*) calloc(JJ, sizeof(double));
+	double *DF = (double*) calloc(JJ, sizeof(double));
+	double *DB = (double*) calloc(JJ, sizeof(double));
+	double *DC = (double*) calloc(JJ, sizeof(double));
+	double *DA = (double*) calloc(JJ, sizeof(double));
+	double *DD = (double*) calloc(JJ, sizeof(double));
+	double *A  = (double*) calloc(JJ, sizeof(double));
+	double *B  = (double*) calloc(JJ, sizeof(double));
+	double *C  = (double*) calloc(JJ, sizeof(double));
+	double *D  = (double*) calloc(JJ, sizeof(double));
+	double *E  = (double*) calloc(JJ, sizeof(double));
 
 	// initialize record counter and wait time
 	m = 0;
@@ -464,29 +442,6 @@ void fdaux(int J, int N, int M, double dr, double dt, double *params,
 	double Ma    = params[2]; double m0 = Ma;
 	double tstop = params[3];
 	
-	// initialize 
-	for (i = 0; i < J; i++){
-		h [i] = 0.0;
-		g [i] = 0.0;
-		f [i] = 0.0;
-		p [i] = 0.0;
-		q [i] = 0.0;
-		vs[i] = 0.0;
-	}
-
-	for (i = 0; i < JJ; i++){
-		A[i] = 0.0;
-		B[i] = 0.0;
-		C[i] = 0.0;
-		D[i] = 0.0;
-		E[i] = 0.0;
-
-		Kh[i] = 0.0;
-		Kg[i] = 0.0;
-		Mh[i] = 0.0;
-		Mg[i] = 0.0;
-	}
-
 	// derivative matrices
 	fdmat(J, U, DF, DB, DC, DA, DD);
 	for (i = 0; i < JJ; i++){

@@ -35,7 +35,7 @@ J  = J1 - 1
 N  = N1 - 1
 
 pl = 'x'
-ydata = vdata
+ydata = qdata
 
 if pl == 'x' :
 	for i in range(N1) :
