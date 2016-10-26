@@ -36,16 +36,22 @@ void write(int J, int M, double dr, double dt, double *params,
 	const int CHRLEN = 1024;
 	char *cptr;
 	double *ptr = &F[0];
-	char Ca[CHRLEN], Bo[CHRLEN], Ma[CHRLEN], Dr[CHRLEN], Dt[CHRLEN];
+	double t1, tstop;
+	char Ca[CHRLEN], Bo[CHRLEN], Ma[CHRLEN], Dr[CHRLEN], Dt[CHRLEN], Tstop[CHRLEN];
 	char pfx[CHRLEN], sfx[CHRLEN], fn[CHRLEN];
 	FILE *fp;
 
 	// store parameters in character arrays
-	sprintf(Ca, "Ca%.0e", params[0]);
-	sprintf(Bo, "Bo%.0e", params[1]);
-	sprintf(Ma, "Ma%.0e", params[2]);
-	sprintf(Dr, "dr%.0e", dr       );
-	sprintf(Dt, "dt%.0e", dt       );
+	sprintf(Ca   , "Ca%.0e"   , params[0]);
+	sprintf(Bo   , "Bo%.0e"   , params[1]);
+	sprintf(Ma   , "Ma%.0e"   , params[2]);
+	sprintf(Dr   , "dr%.0e"   , dr       );
+	sprintf(Dt   , "dt%.0e"   , dt       );
+	sprintf(Tstop, "tstop%.1f", params[3]);
+
+	// get tstop and t1
+	tstop = params[3];
+	t1    = params[5];
 
 	// replace unwanted characters
 	for (n = 0; n < 5; n++){
@@ -60,8 +66,16 @@ void write(int J, int M, double dr, double dt, double *params,
 		}
 	}
 
+	cptr = &Tstop[0];
+	for (i = 0; cptr[i] != '\0'; i++){
+		if (cptr[i] == '.') cptr[i] = '-'; 
+	}
+
 	// create filename
-	sprintf(pfx, "../output/%s/%s/%s/%s/%s/", Ca, Bo, Ma, Dr, Dt);
+	if (tstop > t1)
+		sprintf(pfx, "../output/go/%s/%s/%s/%s/%s/", Ca, Bo, Ma, Dr, Dt);
+	else
+		sprintf(pfx, "../output/stop/%s/%s/%s/%s/%s/%s/", Ca, Bo, Ma, Tstop, Dr, Dt);
 	sprintf(sfx, "%s.txt", f);
 	sprintf(fn , "%s%s", pfx, sfx);
 	

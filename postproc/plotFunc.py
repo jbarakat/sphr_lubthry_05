@@ -8,7 +8,8 @@ import os
 
 # paths
 workdir  = os.getcwd()
-outdir   = workdir + '/../output/Ca1em04/Bo1ep00/Ma0ep00/dr5em02/dt1em07/'
+#outdir   = workdir + '/../output/go/Ca1em03/Bo1ep00/Ma0ep00/dr5em02/dt1em06/'
+outdir   = workdir + '/../output/stop/Ca1em03/Bo1ep00/Ma0ep00/tstop1-2/dr5em02/dt1em02/'
 tfile    = '/t.txt'
 rfile    = '/r.txt'
 hfile    = '/h.txt'
