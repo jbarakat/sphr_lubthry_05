@@ -8,9 +8,11 @@ import os
 
 # paths
 workdir  = os.getcwd()
-#outdir   = workdir + '/../output/go/Ca1em03/Bo1ep00/Ma0ep00/dr5em02/dt1em06/'
-outdir   = workdir + '/../output/stop/Ca1em03/Bo1ep00/Ma0ep00/tstop1-2/dr5em02/dt1em02/'
+outdir   = workdir + '/../output/go/Ca1em03/Bo1ep00/Ma0ep00/dr5em02/dt1em05/'
+outdir   = workdir + '/../output/go/Ca1em03/Bo1ep00/Ma1ep00/dr5em02/dt1em05/'
+#outdir   = workdir + '/../output/stop/Ca1em03/Bo1ep00/Ma0ep00/tstop1-2/dr5em02/dt1em02/'
 
+# filenames
 tfile    = '/t.txt'
 rfile    = '/r.txt'
 hfile    = '/h.txt'
@@ -31,7 +33,7 @@ qdata    = np.loadtxt(outdir + qfile, unpack=True,skiprows=0)
 vdata    = np.loadtxt(outdir + vfile, unpack=True,skiprows=0)
 
 pl = 'x'
-ydata = hdata
+ydata = vdata
 
 # number of space and time points
 J1 = len(tdata[:,0])
@@ -42,16 +44,16 @@ N  = N1 - 1
 
 if pl == 'x' :
 	for i in range(N1) :
-		if i % 1 == 0 :
+		if i % 5 == 0 :
 		#if i < 100 :
 			x = rdata[:,i]
 			y = ydata[:,i]
 			plot(x,y,'-')
 		
-		y = -fdata[:,i]
-		plot(x,y,'k--')
-	xlim([0,0.05])
-	ylim([0.2,0.21])
+		#y = -fdata[:,i]
+		#plot(x,y,'k--')
+	#xlim([0,0.05])
+	#ylim([0.2,0.21])
 	
 	#xlim([0,5])
 	#ylim([0,max(y)+0.01])
