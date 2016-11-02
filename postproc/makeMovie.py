@@ -9,8 +9,8 @@ import os
 
 # paths
 workdir  = os.getcwd()
-outdir   = workdir + '/../output/go/Ca1em03/Bo1ep00/Ma1ep01/dr5em02/dt1em05/'
-outdir   = workdir + '/../output/go/Ca1em01/Bo1ep00/Ma0ep00/dr5em02/dt1em05/'
+outdir   = workdir + '/../output/go/Ca1em03/Bo1ep00/Ma1ep02/dr5em02/dt1em06/'
+#outdir   = workdir + '/../output/go/Ca1em01/Bo1ep00/Ma0ep00/dr5em02/dt1em05/'
 #outdir   = workdir + '/../output/stop/Ca1em03/Bo1ep00/Ma0ep00/tstop1-2/dr5em02/dt1em02/'
 
 # filenames
