@@ -9,8 +9,8 @@ import os
 
 # paths
 workdir  = os.getcwd()
-outdir   = workdir + '/../output/go/Ca1em03/Bo1ep00/Ma1ep02/dr5em02/dt1em05/'
-#outdir   = workdir + '/../output/go/Ca1em03/Bo1ep00/Ma1ep00/dr5em02/dt1em05/'
+outdir   = workdir + '/../output/go/Ca1em03/Bo1ep00/Ma1ep01/dr5em02/dt1em05/'
+outdir   = workdir + '/../output/go/Ca1em01/Bo1ep00/Ma0ep00/dr5em02/dt1em05/'
 #outdir   = workdir + '/../output/stop/Ca1em03/Bo1ep00/Ma0ep00/tstop1-2/dr5em02/dt1em02/'
 
 # filenames
@@ -58,7 +58,7 @@ for ax in (ax1,ax2, ax3, ax4):
 	ax.set_xlabel('$\overline{\sigma}$')
 ax1.set_ylabel('$\overline{h}$')
 ax1.set_ylim(-1.5, 1.5)
-ax2.set_ylabel('$\overline{\Gamma}$')
+ax2.set_ylabel('$\overline{{\Gamma}}$')
 ax2.set_ylim( 0, 1)
 ax3.set_ylabel('$\overline{q}$')
 ax3.set_ylim( -0.5, 10)
@@ -98,5 +98,9 @@ anim = animation.FuncAnimation(fig, animate,
 															        line1a, line1b, line2, line3, line4),
                                init_func=init, frames=N1, interval=30, repeat=True, blit=True)
 
+## format and save movie
+#Writer = animation.writers['ffmpeg']
+#writer = Writer(fps=60, metadata=dict(artist='Me'), bitrate=1800)
+#anim.save('im.mp4', writer=writer)
 
 plt.show()
