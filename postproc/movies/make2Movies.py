@@ -15,7 +15,7 @@ outdir   = workdir + '/../output/go/Ca1em01/Bo1ep00/Ma0ep00/dr5em02/dt1em05'
 #outdir   = workdir + '/../output/go/Ca1em03/Bo1ep00/Ma0ep00/dr5em02/dt1em07'
 #outdir   = workdir + '/../output/go/Ca1em02/Bo1ep00/Ma0ep00/dr5em02/dt1em05'
 
-#outdir   = workdir + '/../output/stop/Ca1em03/Bo1ep00/Ma0ep00/tstop1-2/dr5em02/dt1em04'
+outdir   = workdir + '/../output/stop/Ca1em03/Bo1ep00/Ma0ep00/tstop1-2/dr5em02/dt1em05'
 #outdir   = workdir + '/../output/stop/Ca1em01/Bo1ep00/Ma1ep02/tstop1-2/dr5em02/dt1em4'
 
 # filenames
@@ -86,18 +86,61 @@ def animate(i) :
 	time1 .set_text("$\overline{t}$ = " + str(t))
 	time2 .set_text("$\overline{t}$ = " + str(t))
 
+	# shift axes on ax1
+	shift = True
+	if (shift) :
+		# time range
+		i0 = 40
+		t0 = 4.0
+		t1 = 20.0
+		dt = t1 - t0
+
+		# h plot
+		xmin0, xmax0 = ax1.get_xlim()
+		ymin0, ymax0 = ax1.get_ylim()
+		xmax1 =  0.16
+		dxmax = (xmax1 - xmax0)/dt
+		ymin1 =  0.19
+		ymax1 =  0.21
+		dymin = (ymin1 - ymin0)/dt
+		dymax = (ymax1 - ymax0)/dt
+		if i > i0 and xmax0 > xmax1 :
+			xmax = xmax0 + (i - i0)*dxmax
+			ymin = ymin0 + (i - i0)*dymin
+			ymax = ymax0 + (i - i0)*dymax
+			ax1.set_xlim( xmin0, xmax)
+			ax1.set_ylim( ymin , ymax)
+		
+		# g plot
+		xmin0, xmax0 = ax2.get_xlim()
+		ymin0, ymax0 = ax2.get_ylim()
+		xmax1 =  0.8
+		dxmax = (xmax1 - xmax0)/dt
+		ymin1 = -0.01
+		ymax1 =  0.01
+		dymin = (ymin1 - ymin0)/dt
+		dymax = (ymax1 - ymax0)/dt
+		if i > i0 and xmax0 > xmax1 :
+			xmax = xmax0 + (i - i0)*dxmax
+			ymin = ymin0 + (i - i0)*dymin
+			ymax = ymax0 + (i - i0)*dymax
+			ax2.set_xlim( xmin0, xmax)
+			ax2.set_ylim( ymin , ymax)
+
+
 	print "t = " + str(t)
 	return line1a, line1b, line2, time1, time2
 
 # call the animator. blit=True means only re-draw the parts that have changed
-anim = animation.FuncAnimation(fig, animate, init_func=init, frames=N1, interval=45, repeat=True, blit=True)
+anim = animation.FuncAnimation(fig, animate, init_func=init, frames=N1, interval=45, repeat=True, blit=False)
 
 # format and save movie
-fileName = 'hg_Ca1em01_Bo1ep00_Ma0ep00_dr5em02_dt1em05.mp4'
-#fileName = 'hg_Ca1em02_Bo1ep00_Ma0ep00_dr5em02_dt1em06.mp4'
-#fileName = 'hg_Ca1em03_Bo1ep00_Ma0ep00_dr5em02_dt1em07.mp4'
+#fileName = 'hg_go_Ca1em01_Bo1ep00_Ma0ep00_dr5em02_dt1em05.mp4'
+#fileName = 'hg_go_Ca1em02_Bo1ep00_Ma0ep00_dr5em02_dt1em06.mp4'
+#fileName = 'hg_go_Ca1em03_Bo1ep00_Ma0ep00_dr5em02_dt1em07.mp4'
+fileName = 'hg_stop_Ca1em03_Bo1ep00_Ma0ep00_tstop_1-2_dr5em02_dt1em05.mp4'
 Writer = animation.writers['ffmpeg']
-writer = Writer(fps=45, metadata=dict(artist='Me'), bitrate=1800)
+writer = Writer(fps=20, metadata=dict(artist='Me'), bitrate=1800)
 anim.save(fileName, writer=writer)
 
 plt.show()

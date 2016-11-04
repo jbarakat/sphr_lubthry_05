@@ -98,7 +98,7 @@ def animate(i) :
 	return line1a, line1b, line2, line3, line4, time
 
 # call the animator. blit=True means only re-draw the parts that have changed
-anim = animation.FuncAnimation(fig, animate, init_func=init, frames=N1, interval=30, repeat=True, blit=True)
+anim = animation.FuncAnimation(fig, animate, init_func=init, frames=N1, interval=15, repeat=True, blit=True)
 
 ## format and save movie
 #Writer = animation.writers['ffmpeg']

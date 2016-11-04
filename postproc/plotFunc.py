@@ -10,7 +10,7 @@ import os
 workdir  = os.getcwd()
 outdir   = workdir + '/../output/go/Ca1em03/Bo1ep00/Ma0ep00/dr5em02/dt1em05/'
 outdir   = workdir + '/../output/go/Ca1em03/Bo1ep00/Ma1ep00/dr5em02/dt1em05/'
-#outdir   = workdir + '/../output/stop/Ca1em03/Bo1ep00/Ma0ep00/tstop1-2/dr5em02/dt1em02/'
+outdir   = workdir + '/../output/stop/Ca1em03/Bo1ep00/Ma0ep00/tstop1-2/dr5em02/dt1em05/'
 
 # filenames
 tfile    = '/t.txt'
@@ -32,8 +32,8 @@ pdata    = np.loadtxt(outdir + pfile, unpack=True,skiprows=0)
 qdata    = np.loadtxt(outdir + qfile, unpack=True,skiprows=0)
 vdata    = np.loadtxt(outdir + vfile, unpack=True,skiprows=0)
 
-pl = 'x'
-ydata = vdata
+pl = 't'
+ydata = hdata
 
 # number of space and time points
 J1 = len(tdata[:,0])
@@ -57,19 +57,39 @@ if pl == 'x' :
 	
 	#xlim([0,5])
 	#ylim([0,max(y)+0.01])
-	show()
 
 if pl == 't' :
 	for i in range(J1) :
 		#if i % 1 == 0 :
-		if i == 0 :
+		if i == 0 : # centerline
 			x = tdata[i,:]
 			y = ydata[i,:]
 			for n in range(N1) :
 				y[n] = hdata[i,n] + fdata[i,n]
+				#y[n] = gdata[i,n]+1
 			#loglog(x,y,'-')
-			plot(x,y,'-')
-	xlim([1.2,50])
-	ylim([0,0.01])
-	show()
+			loglog(x,y,'-')
+
+			# calculate slope of log log plot
+			logx = []
+			logy = []
+			for n in range(N1) :
+				if y[n] > 0 and x[n] > 0:
+					logx.append(log(x[n]))
+					logy.append(log(y[n]))
+				else :
+					logx.append(log(x[1]))
+					logy.append(log(y[1]))
+			#plot(logx,logy,'-')
+
+			slope = (logy[-1] - logy[-2])/(logx[-1] - logx[-2])
+			print slope
+
+	#xlim([1.2,50])
+	#ylim([0,0.01])
+	#ylim([0,0.001])
+	xlabel('$\overline{t}$')
+	ylabel('$\overline{h}_1 + \overline{h}_2$')
+	#ylabel('$\overline{\Gamma}$')
+show()
 
