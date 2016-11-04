@@ -9,11 +9,12 @@ import os
 
 # paths
 workdir  = os.getcwd()
-outdir   = workdir + '/../output/go/Ca1em01/Bo1ep00/Ma1ep01/dr5em02/dt1em05/'
-#outdir   = workdir + '/../output/go/Ca1em02/Bo1ep00/Ma0ep00/dr5em02/dt1em05/'
+workdir  = workdir + '/..'
+outdir   = workdir + '/../output/go/Ca1em01/Bo1ep00/Ma1ep01/dr5em02/dt1em05'
+#outdir   = workdir + '/../output/go/Ca1em02/Bo1ep00/Ma0ep00/dr5em02/dt1em05'
 
-outdir   = workdir + '/../output/stop/Ca1em03/Bo1ep00/Ma0ep00/tstop1-2/dr5em02/dt1em04/'
-#outdir   = workdir + '/../output/stop/Ca1em01/Bo1ep00/Ma1ep02/tstop1-2/dr5em02/dt1em04/'
+outdir   = workdir + '/../output/stop/Ca1em03/Bo1ep00/Ma0ep00/tstop1-2/dr5em02/dt1em04'
+#outdir   = workdir + '/../output/stop/Ca1em01/Bo1ep00/Ma1ep02/tstop1-2/dr5em02/dt1em4'
 
 # filenames
 tfile    = '/t.txt'
@@ -61,6 +62,7 @@ for ax in (ax1,ax2, ax3, ax4):
 	ax.set_xlabel('$\overline{\sigma}$')
 ax1.set_ylabel('$\overline{h}$')
 ax1.set_ylim(-1.5, 1.5)
+ax1.set_ylim(0, 3)
 ax2.set_ylabel('$\overline{{\Gamma}}$')
 ax2.set_ylim( 0, 1)
 ax3.set_ylabel('$\overline{q}$')
@@ -83,8 +85,8 @@ def init() :
 def animate(i) :
 	t   =  tdata[0,i]
 	x   =  rdata[:,i]
-	y1a =  hdata[:,i]
-	y1b = -fdata[:,i]
+	y1a =  pdata[:,i]
+	y1b =  pdata[:,i]
 	y2  =  gdata[:,i] + 1
 	y3  =  qdata[:,i]
 	y4  =  vdata[:,i]

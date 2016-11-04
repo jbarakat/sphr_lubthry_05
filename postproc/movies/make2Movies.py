@@ -9,11 +9,14 @@ import os
 
 # paths
 workdir  = os.getcwd()
-outdir   = workdir + '/../output/go/Ca1em01/Bo1ep00/Ma1ep01/dr5em02/dt1em05/'
-#outdir   = workdir + '/../output/go/Ca1em02/Bo1ep00/Ma0ep00/dr5em02/dt1em05/'
+workdir  = workdir + '/..'
+outdir   = workdir + '/../output/go/Ca1em01/Bo1ep00/Ma0ep00/dr5em02/dt1em05'
+#outdir   = workdir + '/../output/go/Ca1em02/Bo1ep00/Ma0ep00/dr5em02/dt1em06'
+#outdir   = workdir + '/../output/go/Ca1em03/Bo1ep00/Ma0ep00/dr5em02/dt1em07'
+#outdir   = workdir + '/../output/go/Ca1em02/Bo1ep00/Ma0ep00/dr5em02/dt1em05'
 
-outdir   = workdir + '/../output/stop/Ca1em03/Bo1ep00/Ma0ep00/tstop1-2/dr5em02/dt1em04/'
-#outdir   = workdir + '/../output/stop/Ca1em01/Bo1ep00/Ma1ep02/tstop1-2/dr5em02/dt1em04/'
+#outdir   = workdir + '/../output/stop/Ca1em03/Bo1ep00/Ma0ep00/tstop1-2/dr5em02/dt1em04'
+#outdir   = workdir + '/../output/stop/Ca1em01/Bo1ep00/Ma1ep02/tstop1-2/dr5em02/dt1em4'
 
 # filenames
 tfile    = '/t.txt'
@@ -42,42 +45,31 @@ J  = J1 - 1
 N  = N1 - 1
 
 # set up the figure, the axis, and the plot element to be animated
-fig = plt.figure(figsize=(20,10))
-#ax = plt.axes(xlim=(0, 5), ylim=(-2,2))
-#line, = ax.plot([], [], lw=2)
-ax1 = fig.add_subplot(221)
-ax2 = fig.add_subplot(222)
-ax3 = fig.add_subplot(223)
-ax4 = fig.add_subplot(224)
+fig = plt.figure(figsize=(15,2.5))
+ax1 = fig.add_subplot(121)
+ax2 = fig.add_subplot(122)
 line1a, = ax1.plot([], [], 'b-')
 line1b, = ax1.plot([], [], 'k-')
 line2,  = ax2.plot([], [], 'g-')
-line3,  = ax3.plot([], [], 'b-')
-line4,  = ax4.plot([], [], 'g-')
-time    = ax1.text(0.85, 0.05, '', transform=ax1.transAxes)
+time1   = ax1.text(0.85, 0.05, '', transform=ax1.transAxes)
+time2   = ax2.text(0.85, 0.05, '', transform=ax2.transAxes)
 
-for ax in (ax1,ax2, ax3, ax4):
-	ax.set_xlim( 0, 20)
+for ax in (ax1,ax2):
+	ax.set_xlim( 0, 4)
 	ax.set_xlabel('$\overline{\sigma}$')
 ax1.set_ylabel('$\overline{h}$')
 ax1.set_ylim(-1.5, 1.5)
-ax2.set_ylabel('$\overline{{\Gamma}}$')
+ax2.set_ylabel(r'$\overline{\Gamma}$')
 ax2.set_ylim( 0, 1)
-ax3.set_ylabel('$\overline{q}$')
-ax3.set_ylim( -0.5, 10)
-ax4.set_ylabel('$\overline{v}_s$')
-ax4.set_ylim( -0.5, 1)
-
 
 # initialization function: plot the background of each frame
 def init() :
 	line1a.set_data([], [])
 	line1b.set_data([], [])
 	line2 .set_data([], [])
-	line3 .set_data([], [])
-	line4 .set_data([], [])
-	time  .set_text('')
-	return line1a, line1b, line2, line3, line4, time
+	time1 .set_text('')
+	time2 .set_text('')
+	return line1a, line1b, line2, time1, time2
 
 # animation function, to be called sequentially
 def animate(i) :
@@ -86,25 +78,26 @@ def animate(i) :
 	y1a =  hdata[:,i]
 	y1b = -fdata[:,i]
 	y2  =  gdata[:,i] + 1
-	y3  =  qdata[:,i]
-	y4  =  vdata[:,i]
 
 	line1a.set_data(x, y1a)
 	line1b.set_data(x, y1b)
 	line2 .set_data(x, y2 )
-	line3 .set_data(x, y3 )
-	line4 .set_data(x, y4 )
-	time  .set_text("t = " + str(t))
-	return line1a, line1b, line2, line3, line4, time
+
+	time1 .set_text("$\overline{t}$ = " + str(t))
+	time2 .set_text("$\overline{t}$ = " + str(t))
+
+	print "t = " + str(t)
+	return line1a, line1b, line2, time1, time2
 
 # call the animator. blit=True means only re-draw the parts that have changed
-anim = animation.FuncAnimation(fig, animate, init_func=init, frames=N1, interval=30, repeat=True, blit=True)
+anim = animation.FuncAnimation(fig, animate, init_func=init, frames=N1, interval=45, repeat=True, blit=True)
 
-## format and save movie
-#Writer = animation.writers['ffmpeg']
-#writer = Writer(fps=60, metadata=dict(artist='Me'), bitrate=1800)
-#anim.save('im.mp4', writer=writer)
-                               #fargs=(rdata, hdata, -fdata, 1+gdata, qdata, vdata,
-															 #       line1a, line1b, line2, line3, line4, time),
+# format and save movie
+fileName = 'hg_Ca1em01_Bo1ep00_Ma0ep00_dr5em02_dt1em05.mp4'
+#fileName = 'hg_Ca1em02_Bo1ep00_Ma0ep00_dr5em02_dt1em06.mp4'
+#fileName = 'hg_Ca1em03_Bo1ep00_Ma0ep00_dr5em02_dt1em07.mp4'
+Writer = animation.writers['ffmpeg']
+writer = Writer(fps=45, metadata=dict(artist='Me'), bitrate=1800)
+anim.save(fileName, writer=writer)
 
 plt.show()
