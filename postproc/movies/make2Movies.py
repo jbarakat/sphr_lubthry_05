@@ -16,6 +16,10 @@ outdir   = workdir + '/../output/go/Ca1em01/Bo1ep00/Ma0ep00/dr5em02/dt1em05'
 #outdir   = workdir + '/../output/go/Ca1em02/Bo1ep00/Ma0ep00/dr5em02/dt1em05'
 
 outdir   = workdir + '/../output/stop/Ca1em03/Bo1ep00/Ma0ep00/tstop1-2/dr5em02/dt1em05'
+outdir   = workdir + '/../output/stop/Ca1em03/Bo1ep00/Ma1ep00/tstop1-2/dr5em02/dt1em05'
+outdir   = workdir + '/../output/stop/Ca1em03/Bo1ep00/Ma1ep01/tstop1-2/dr5em02/dt1em05'
+outdir   = workdir + '/../output/stop/Ca1em03/Bo1ep00/Ma1ep02/tstop1-2/dr5em02/dt1em05'
+#outdir   = workdir + '/../output/stop/Ca1em03/Bo1ep00/Ma1ep02/tstop1-2/dr5em02/dt1em05'
 #outdir   = workdir + '/../output/stop/Ca1em01/Bo1ep00/Ma1ep02/tstop1-2/dr5em02/dt1em4'
 
 # filenames
@@ -114,10 +118,10 @@ def animate(i) :
 		# g plot
 		xmin0, xmax0 = ax2.get_xlim()
 		ymin0, ymax0 = ax2.get_ylim()
-		xmax1 =  0.8
+		xmax1 =  1.2
 		dxmax = (xmax1 - xmax0)/dt
-		ymin1 = -0.01
-		ymax1 =  0.01
+		ymin1 =  0.9
+		ymax1 =  1.01
 		dymin = (ymin1 - ymin0)/dt
 		dymax = (ymax1 - ymax0)/dt
 		if i > i0 and xmax0 > xmax1 :
@@ -138,7 +142,10 @@ anim = animation.FuncAnimation(fig, animate, init_func=init, frames=N1, interval
 #fileName = 'hg_go_Ca1em01_Bo1ep00_Ma0ep00_dr5em02_dt1em05.mp4'
 #fileName = 'hg_go_Ca1em02_Bo1ep00_Ma0ep00_dr5em02_dt1em06.mp4'
 #fileName = 'hg_go_Ca1em03_Bo1ep00_Ma0ep00_dr5em02_dt1em07.mp4'
-fileName = 'hg_stop_Ca1em03_Bo1ep00_Ma0ep00_tstop_1-2_dr5em02_dt1em05.mp4'
+#fileName = 'hg_stop_Ca1em03_Bo1ep00_Ma0ep00_tstop_1-2_dr5em02_dt1em05.mp4'
+#fileName = 'hg_stop_Ca1em03_Bo1ep00_Ma1ep00_tstop_1-2_dr5em02_dt1em05.mp4'
+#fileName = 'hg_stop_Ca1em03_Bo1ep00_Ma1ep01_tstop_1-2_dr5em02_dt1em05.mp4'
+fileName = 'hg_stop_Ca1em03_Bo1ep00_Ma1ep02_tstop_1-2_dr5em02_dt1em05.mp4'
 Writer = animation.writers['ffmpeg']
 writer = Writer(fps=20, metadata=dict(artist='Me'), bitrate=1800)
 anim.save(fileName, writer=writer)
