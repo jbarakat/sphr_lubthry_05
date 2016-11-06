@@ -78,7 +78,7 @@ void write(int J, int M, double dr, double dt, double *params,
 		sprintf(pfx, "../output/stop/%s/%s/%s/%s/%s/%s/", Ca, Bo, Ma, Tstop, Dr, Dt);
 	sprintf(sfx, "%s.txt", f);
 	sprintf(fn , "%s%s", pfx, sfx);
-	
+
 	// write data to files
 	fp = fopen(fn,"w");
 	for (m = 0; m < M1; m++){
