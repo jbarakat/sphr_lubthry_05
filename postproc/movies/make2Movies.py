@@ -19,6 +19,7 @@ outdir   = workdir + '/../output/stop/Ca1em03/Bo1ep00/Ma0ep00/tstop1-2/dr5em02/d
 outdir   = workdir + '/../output/stop/Ca1em03/Bo1ep00/Ma1ep00/tstop1-2/dr5em02/dt1em05'
 outdir   = workdir + '/../output/stop/Ca1em03/Bo1ep00/Ma1ep01/tstop1-2/dr5em02/dt1em05'
 outdir   = workdir + '/../output/stop/Ca1em03/Bo1ep00/Ma1ep02/tstop1-2/dr5em02/dt1em05'
+outdir   = workdir + '/../output/stop/Ca2em02/Bo1ep00/Ma0ep00/tstop1-3/dr5em02/dt1em05'
 #outdir   = workdir + '/../output/stop/Ca1em03/Bo1ep00/Ma1ep02/tstop1-2/dr5em02/dt1em05'
 #outdir   = workdir + '/../output/stop/Ca1em01/Bo1ep00/Ma1ep02/tstop1-2/dr5em02/dt1em4'
 
@@ -91,7 +92,7 @@ def animate(i) :
 	time2 .set_text("$\overline{t}$ = " + str(t))
 
 	# shift axes on ax1
-	shift = True
+	shift = False
 	if (shift) :
 		# time range
 		i0 = 40
@@ -138,16 +139,16 @@ def animate(i) :
 # call the animator. blit=True means only re-draw the parts that have changed
 anim = animation.FuncAnimation(fig, animate, init_func=init, frames=N1, interval=45, repeat=True, blit=False)
 
-# format and save movie
-#fileName = 'hg_go_Ca1em01_Bo1ep00_Ma0ep00_dr5em02_dt1em05.mp4'
-#fileName = 'hg_go_Ca1em02_Bo1ep00_Ma0ep00_dr5em02_dt1em06.mp4'
-#fileName = 'hg_go_Ca1em03_Bo1ep00_Ma0ep00_dr5em02_dt1em07.mp4'
-#fileName = 'hg_stop_Ca1em03_Bo1ep00_Ma0ep00_tstop_1-2_dr5em02_dt1em05.mp4'
-#fileName = 'hg_stop_Ca1em03_Bo1ep00_Ma1ep00_tstop_1-2_dr5em02_dt1em05.mp4'
-#fileName = 'hg_stop_Ca1em03_Bo1ep00_Ma1ep01_tstop_1-2_dr5em02_dt1em05.mp4'
-fileName = 'hg_stop_Ca1em03_Bo1ep00_Ma1ep02_tstop_1-2_dr5em02_dt1em05.mp4'
-Writer = animation.writers['ffmpeg']
-writer = Writer(fps=20, metadata=dict(artist='Me'), bitrate=1800)
-anim.save(fileName, writer=writer)
+## format and save movie
+##fileName = 'hg_go_Ca1em01_Bo1ep00_Ma0ep00_dr5em02_dt1em05.mp4'
+##fileName = 'hg_go_Ca1em02_Bo1ep00_Ma0ep00_dr5em02_dt1em06.mp4'
+##fileName = 'hg_go_Ca1em03_Bo1ep00_Ma0ep00_dr5em02_dt1em07.mp4'
+##fileName = 'hg_stop_Ca1em03_Bo1ep00_Ma0ep00_tstop_1-2_dr5em02_dt1em05.mp4'
+##fileName = 'hg_stop_Ca1em03_Bo1ep00_Ma1ep00_tstop_1-2_dr5em02_dt1em05.mp4'
+##fileName = 'hg_stop_Ca1em03_Bo1ep00_Ma1ep01_tstop_1-2_dr5em02_dt1em05.mp4'
+#fileName = 'hg_stop_Ca1em03_Bo1ep00_Ma1ep02_tstop_1-2_dr5em02_dt1em05.mp4'
+#Writer = animation.writers['ffmpeg']
+#writer = Writer(fps=20, metadata=dict(artist='Me'), bitrate=1800)
+#anim.save(fileName, writer=writer)
 
 plt.show()
