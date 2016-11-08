@@ -199,12 +199,12 @@ void fdstep(int n, int J, double dr, double dt, double *params,
 			sg[i] = 0.0;
 		}
 	}
-	//else { // add evaporation
-	//	double H = 0.000; // fitting parameter
-	//	for (i = 0; i < J; i++){
-	//		sh[i] += -H/pow(t,0.5);
-	//	}
-	//}
+	else { // add evaporation
+		double H = 0.0001; // fitting parameter
+		for (i = 0; i < J; i++){
+			sh[i] += -H/pow(t,0.5);
+		}
+	}
 
 	for (i = 0; i < J; i++){
 		sh[i] *= dt;
